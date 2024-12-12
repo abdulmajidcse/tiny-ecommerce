@@ -22,6 +22,11 @@
                         {{ __('Frontend') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
+                        {{ __('Category') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -86,6 +91,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="url('/')">
                 {{ __('Frontend') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
+                {{ __('Category') }}
             </x-responsive-nav-link>
         </div>
 
