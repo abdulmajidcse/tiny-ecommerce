@@ -13,6 +13,34 @@
                     New Product
                 </a>
 
+                <form action="{{ route('products.index') }}" method="get">
+                    <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <x-input-label for="category_id" :value="__('Category')" />
+                            <select id="category_id" name="category_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1 block w-full">
+                                @foreach ($categories as $category)
+                                    <option value="">Related Category</option>
+                                    <option value="{{ $category->id }}"
+                                        {{ $category_id == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <x-input-label for="name" :value="__('Name')" />
+                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
+                                :value="$name" />
+                        </div>
+
+                        <div>
+                            <x-input-label class="opacity-0" :value="__('Search')" />
+                            <x-primary-button class="mt-1 py-3">Search</x-primary-button>
+                        </div>
+                    </div>
+                </form>
+
                 <div class="shadow overflow-x-auto border-b border-gray-200 dark:border-gray-700 sm:rounded-lg mt-5">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-none">
                         <thead class="bg-gray-50">
@@ -61,6 +89,9 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium dark:text-white">
                                         <div class="space-x-2">
                                             <div class="flex gap-2" x-data="{ deleteIs: false }">
+                                                <a href="{{ route('products.show', $product->id) }}"
+                                                    class="underline text-green-500 hover:no-underline">View</a>
+
                                                 <a href="{{ route('products.edit', $product->id) }}"
                                                     class="underline text-blue-500 hover:no-underline">Edit</a>
 
