@@ -61,6 +61,9 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium dark:text-white">
                                         <div class="space-x-2">
                                             <div class="flex gap-2" x-data="{ deleteIs: false }">
+                                                <a href="{{ route('products.show', $product->id) }}"
+                                                    class="underline text-green-500 hover:no-underline">View</a>
+
                                                 <a href="{{ route('products.edit', $product->id) }}"
                                                     class="underline text-blue-500 hover:no-underline">Edit</a>
 
