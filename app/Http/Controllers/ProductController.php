@@ -12,9 +12,25 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['products'] = Product::with('category')->latest()->paginate(10);
+        $data['category_id'] = $request->query('category_id');
+        $data['name'] = $request->query('name');
+        $data['categories'] = Category::select('id', 'name')->oldest('name')->get();
+
+        $productQuery = Product::with('category');
+
+        if ($data['category_id']) {
+            // search with category
+            $productQuery->where('category_id', $data['category_id']);
+        }
+
+        if ($data['name']) {
+            // search with product name
+            $productQuery->where('name', 'LIKE', '%' . $data['name'] . '%');
+        }
+
+        $data['products'] = $productQuery->latest()->paginate(10);
 
         return view('product.index', $data);
     }
