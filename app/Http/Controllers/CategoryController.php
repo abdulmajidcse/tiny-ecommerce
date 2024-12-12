@@ -67,8 +67,19 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
+        if ($category->products->count() > 0) {
+            $toast = [
+                'message' => 'This category is associated with a product. Can not delete it!',
+                'type' => 'error',
+            ];
+        } else {
+            $category->delete();
+            $toast = [
+                'message' => 'Category Deleted Successfully!',
+                'type' => 'success',
+            ];
+        }
 
-        return redirect()->route('categories.index')->with(['message' => 'Category Deleted Successfully!', 'type' => 'success']);
+        return redirect()->route('categories.index')->with($toast);
     }
 }
