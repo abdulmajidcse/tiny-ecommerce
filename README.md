@@ -18,4 +18,9 @@ It's a small ecommerce website where user can place an order and also admin can 
 
 And then visit http://localhost:8000/ and see the magic!
 
+## Admin Login
+- Email: `admin@gmail.com`
+- Password `12345678`
+
+
 ## Thank you!
