@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
@@ -99,7 +100,10 @@ class CheckoutController extends Controller
             return redirect('/')->with(['message' => 'Your Order Placed Successfully! We will contact you soon. Thank you!', 'type' => 'success']);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect('/')->with(['message' => $th->getMessage(), 'type' => 'error']);
+
+            Log::error('Order Checkout Error: ', (array)$th);
+
+            return redirect('/')->with(['message' => 'Something went Wrong! Please, try again later.', 'type' => 'error']);
         }
     }
 }
