@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\ProductService;
+use Illuminate\Http\Request;
 
 class FrontendController extends Controller
 {
-    public function index()
+    public function index(Request $request, ProductService $productService)
     {
-        $data['products'] = Product::with('category')->latest()->paginate(10);
-
-        return view('home', $data);
+        return view('home', $productService->getProducts($request));
     }
 
     public function productDetails(Product $product)

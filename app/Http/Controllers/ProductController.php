@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -12,27 +13,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, ProductService $productService)
     {
-        $data['category_id'] = $request->query('category_id');
-        $data['name'] = $request->query('name');
-        $data['categories'] = Category::select('id', 'name')->oldest('name')->get();
-
-        $productQuery = Product::with('category');
-
-        if ($data['category_id']) {
-            // search with category
-            $productQuery->where('category_id', $data['category_id']);
-        }
-
-        if ($data['name']) {
-            // search with product name
-            $productQuery->where('name', 'LIKE', '%' . $data['name'] . '%');
-        }
-
-        $data['products'] = $productQuery->latest()->paginate(10);
-
-        return view('product.index', $data);
+        return view('product.index', $productService->getProducts($request));
     }
 
     /**

@@ -1,37 +1,31 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Product List') }}
+            {{ __('order List') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <a href="{{ route('products.create') }}"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    New Product
-                </a>
-
-                <form action="{{ route('products.index') }}" method="get">
-                    <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <form action="{{ route('orders.index') }}" method="get">
+                    <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
-                            <x-input-label for="category_id" :value="__('Category')" />
-                            <select id="category_id" name="category_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1 block w-full">
-                                @foreach ($categories as $category)
-                                    <option value="">Related Category</option>
-                                    <option value="{{ $category->id }}"
-                                        {{ $category_id == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}</option>
-                                @endforeach
-                            </select>
+                            <x-input-label for="name" :value="__('Customer Name')" />
+                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
+                                :value="$name" />
                         </div>
 
                         <div>
-                            <x-input-label for="name" :value="__('Product Name')" />
-                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
-                                :value="$name" />
+                            <x-input-label for="email" :value="__('Email')" />
+                            <x-text-input id="email" name="email" type="text" class="mt-1 block w-full"
+                                :value="$email" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="mobile" :value="__('Mobile')" />
+                            <x-text-input id="mobile" name="mobile" type="text" class="mt-1 block w-full"
+                                :value="$mobile" />
                         </div>
 
                         <div>
@@ -52,13 +46,19 @@
                                     Name</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 uppercase tracking-wider dark:bg-gray-800 dark:text-gray-400">
-                                    category</th>
+                                    Email</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 uppercase tracking-wider dark:bg-gray-800 dark:text-gray-400">
-                                    Price</th>
+                                    Mobile</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 uppercase tracking-wider dark:bg-gray-800 dark:text-gray-400">
-                                    Stock Quantity</th>
+                                    Order Date</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 uppercase tracking-wider dark:bg-gray-800 dark:text-gray-400">
+                                    Sub Total</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 uppercase tracking-wider dark:bg-gray-800 dark:text-gray-400">
+                                    Status</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium whitespace-nowrap text-gray-500 uppercase tracking-wider dark:bg-gray-800 dark:text-gray-400">
                                     Action</th>
@@ -66,52 +66,36 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-none">
                             @php
-                                $sl = $products->firstItem();
+                                $sl = $orders->firstItem();
                             @endphp
-                            @forelse ($products as $product)
+                            @forelse ($orders as $order)
                                 <tr class="bg-white dark:bg-gray-700 dark:text-white">
                                     <th scope="row" class="px-6 py-4 text-sm font-medium dark:text-white">
                                         {{ $sl++ }}
                                     </th>
                                     <td class="px-6 py-4 text-sm font-medium dark:text-white">
-                                        {{ $product->name }}
+                                        {{ $order->name }}
                                     </td>
                                     <td class="px-6 py-4 text-sm font-medium dark:text-white">
-                                        {{ $product->category?->name ?? 'N/A' }}
+                                        {{ $order->email }}
                                     </td>
                                     <td class="px-6 py-4 text-sm font-medium dark:text-white">
-                                        TK {{ $product->price }}
+                                        {{ $order->mobile }}
                                     </td>
                                     <td class="px-6 py-4 text-sm font-medium dark:text-white">
-                                        {{ $product->stock_quantity }}
+                                        {{ $order->created_at->format('Y-m-d') }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm font-medium dark:text-white">
+                                        TK {{ $order->sub_total }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm font-medium dark:text-white">
+                                        {{ str($order->status)->title() }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium dark:text-white">
                                         <div class="space-x-2">
-                                            <div class="flex gap-2" x-data="{ deleteIs: false }">
-                                                <a href="{{ route('products.show', $product->id) }}"
+                                            <div class="flex gap-2">
+                                                <a href="{{ route('orders.show', $order->id) }}"
                                                     class="underline text-green-500 hover:no-underline">View</a>
-
-                                                <a href="{{ route('products.edit', $product->id) }}"
-                                                    class="underline text-blue-500 hover:no-underline">Edit</a>
-
-                                                <button type="button" class="underline text-red-500 hover:no-underline"
-                                                    x-on:click="deleteIs=true" x-show="!deleteIs">Delete</button>
-
-                                                <div class="flex gap-2">
-                                                    <form method="POST"
-                                                        action="{{ route('products.destroy', $product->id) }}">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <x-danger-button type="button" x-show="deleteIs"
-                                                            onclick="event.preventDefault();
-                                                                this.closest('form').submit();">
-                                                            Yes
-                                                        </x-danger-button>
-                                                    </form>
-                                                    <x-secondary-button x-show="deleteIs" x-on:click="deleteIs=false">
-                                                        No
-                                                    </x-secondary-button>
-                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -123,7 +107,7 @@
                                         colspan="100">
                                         <span
                                             class="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">No
-                                            product available!</span>
+                                            order available!</span>
                                     </th>
                                 </tr>
                             @endforelse
@@ -132,7 +116,7 @@
                     </table>
                 </div>
                 <div class="mt-2">
-                    {{ $products->links() }}
+                    {{ $orders->links() }}
                 </div>
             </div>
         </div>
