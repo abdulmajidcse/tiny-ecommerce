@@ -29,14 +29,13 @@
                         </div>
 
                         <div>
-                            <x-input-label for="name" :value="__('Name')" />
+                            <x-input-label for="name" :value="__('Product Name')" />
                             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
                                 :value="$name" />
                         </div>
 
                         <div>
-                            <x-input-label class="opacity-0" :value="__('Search')" />
-                            <x-primary-button class="mt-1 py-3">Search</x-primary-button>
+                            <x-primary-button class="sm:mt-6 py-3">Search</x-primary-button>
                         </div>
                     </div>
                 </form>
