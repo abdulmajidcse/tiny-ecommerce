@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProductController;
@@ -8,6 +9,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 Route::get('product-details/{product}', [FrontendController::class, 'productDetails'])->name('productDetails');
+
+// cart routes
+Route::prefix('carts')->name('carts.')->group(function() {
+    Route::post('{product}', [CartController::class, 'storeOrUpdate'])->name('storeOrUpdate');
+});
 
 Route::middleware('auth')->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');

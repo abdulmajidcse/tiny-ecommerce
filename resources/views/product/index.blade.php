@@ -83,7 +83,7 @@
                                         TK {{ $product->price }}
                                     </td>
                                     <td class="px-6 py-4 text-sm font-medium dark:text-white">
-                                        TK {{ $product->stock_quantity }}
+                                        {{ $product->stock_quantity }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium dark:text-white">
                                         <div class="space-x-2">
