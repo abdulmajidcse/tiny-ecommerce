@@ -13,6 +13,7 @@ It's a small ecommerce website where user can place an order and also admin can 
 - Then run a command `composer install`
 - Then run a command `npm install`
 - Then run a command `npm run build`
+- Then run a command `php artisan migrate:fresh --seed`
 - Then run a command `composer run dev`
 
 And then visit http://localhost:8000/ and see the magic!
