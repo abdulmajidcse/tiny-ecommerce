@@ -15,4 +15,9 @@ class Order extends Model
         'sub_total',
         'status',
     ];
+
+    public function OrderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
 }

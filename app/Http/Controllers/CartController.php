@@ -27,12 +27,9 @@ class CartController extends Controller
     public function storeOrUpdate(Request $request, Product $product)
     {
         $quantity = intval($request->input('quantity'));
-        if ($quantity < 1) {
-            // validate quantity
-            return back()->with(['message' => 'Product quantity must be at least 1.', 'type' => 'error']);
-        }
+        $exactQuantity = $quantity > 0 ? $quantity : 1;
 
-        if ($product->stock_quantity < $quantity) {
+        if ($product->stock_quantity < $exactQuantity) {
             // checkt stock quantity availabilty
             return back()->with(['message' => 'The stock quantity is ' . $product->stock_quantity . ' only!', 'type' => 'error']);
         }
@@ -41,14 +38,15 @@ class CartController extends Controller
         $cart = $product->carts()->where('guest_id', session('guest_id'))->first();
 
         if ($cart) {
-            if ($product->stock_quantity < ($quantity + $cart->quantity)) {
+            $updateQuantity = $quantity > 0 ? $quantity : $cart->quantity + 1;
+            if ($product->stock_quantity < $updateQuantity) {
                 // checkt stock quantity availabilty
                 return back()->with(['message' => 'The stock quantity is ' . $product->stock_quantity . ' only!', 'type' => 'error']);
             }
 
             // update existing cart item quantity
             $cart->update([
-                'quantity' => $quantity + $cart->quantity,
+                'quantity' => $updateQuantity,
             ]);
 
             $message = 'Item updated to your cart successfully.';
@@ -57,7 +55,7 @@ class CartController extends Controller
             $product->carts()->create([
                 'ip' => $request->ip(),
                 'guest_id' => session('guest_id'),
-                'quantity' => $quantity,
+                'quantity' => $exactQuantity,
             ]);
 
             $message = 'New item added to your cart successfully.';
