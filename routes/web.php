@@ -12,7 +12,9 @@ Route::get('product-details/{product}', [FrontendController::class, 'productDeta
 
 // cart routes
 Route::prefix('carts')->name('carts.')->group(function() {
+    Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('{product}', [CartController::class, 'storeOrUpdate'])->name('storeOrUpdate');
+    Route::delete('{cart?}', [CartController::class, 'destroy'])->name('destroy');
 });
 
 Route::middleware('auth')->group(function () {

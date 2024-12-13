@@ -2,11 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $data['carts'] = Cart::with('product')
+            ->whereHas('product')
+            ->where('guest_id', session('guest_id'))
+            ->get();
+
+        return view('cart.index', $data);
+    }
+
     /**
      * Store or update cart item
      */
@@ -47,6 +61,24 @@ class CartController extends Controller
             ]);
 
             $message = 'New item added to your cart successfully.';
+        }
+
+        return back()->with(['message' => $message, 'type' => 'success']);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(?Cart $cart = null)
+    {
+        if ($cart) {
+            // only specific cart of this guest
+            $cart->guest_id == session('guest_id') && $cart->delete();
+            $message = 'Cart Item Deleted Successfully!';
+        } else {
+            // delete all carts of this guest
+            Cart::where('guest_id', session('guest_id'))->delete();
+            $message = 'Cart Deleted Successfully!';
         }
 
         return back()->with(['message' => $message, 'type' => 'success']);
